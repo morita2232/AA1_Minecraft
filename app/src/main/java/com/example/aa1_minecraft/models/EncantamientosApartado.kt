@@ -135,7 +135,7 @@ fun EncantamientoConcreto(encantamiento: Encantamientos, modifier: Modifier = Mo
                 Spacer(modifier = Modifier.width(16.dp))
                 Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
                     Spacer(modifier = Modifier.height(5.dp))
-                    Text(text = encantamiento.encantamiento.nombre, textAlign = TextAlign.Center, fontSize = 30.sp)
+                    Text(text = encantamiento.encantamiento.nombre, textAlign = TextAlign.Center, fontSize = 28.sp)
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(text = encantamiento.efecto, textAlign = TextAlign.Center)
                 }
@@ -244,6 +244,41 @@ fun EncantamientoConcreto(encantamiento: Encantamientos, modifier: Modifier = Mo
                         }
                     }
                 }
+                Row (modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.Gray)
+                    .weight(1f), horizontalArrangement = Arrangement.Center) {
+                    Box(modifier = Modifier
+                        .weight(1f)
+                        .border(BorderStroke(2.dp, Color.Red))
+                        .padding(2.dp)
+                        .border(BorderStroke(4.dp, Color.Black.copy(alpha = 0.75f)))
+                        .fillMaxSize(),
+                        contentAlignment = Alignment.Center) {
+                        Text(
+                            text = "Disponible en los siguientes items",
+                            fontSize = 20.sp,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                    Box(modifier = Modifier
+                            .weight(1f)
+                            .border(BorderStroke(2.dp, Color.Red))
+                            .padding(2.dp)
+                            .border(BorderStroke(4.dp, Color.Black.copy(alpha = 0.75f)))
+                            .fillMaxSize(),
+                            contentAlignment = Alignment.Center) {
+                            LazyColumn {
+                                item{
+                                    for (item in encantamiento.encantamiento.itemsCompatibles) {
+                                        Text(text = item.nombre, fontSize = 20.sp, textAlign = TextAlign.Center)
+                                        Spacer(modifier = Modifier.height(2.dp))
+                                    }
+                                }
+
+                            }
+                        }
+                    }
                 Text(text = "Random texto para probar el diseño", fontSize = 30.sp, textAlign = TextAlign.Center)
             }
         }
