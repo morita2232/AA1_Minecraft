@@ -42,20 +42,22 @@ import com.example.aa1_minecraft.clases.Encantamientos
 fun EncantamientoEscena(modifier: Modifier = Modifier) {
     val listaEncantamientos = DataLoaders().loadEncantamientosInfo()
     var encantamientoSelecciodo by remember { mutableStateOf<Encantamientos?>(null) }
-    if (encantamientoSelecciodo != null) {
-        EncantamientoConcreto(encantamiento = encantamientoSelecciodo!!)
-    } else {
-        Column(modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp)){
-            Text("Encantamientos disponibles:", fontSize = 24.sp)
-            Spacer(modifier = Modifier.height(16.dp))
+    val encantamientosFinal = listaEncantamientos.filter { it.versionImplementada <= Version.version.toFloat() }
+    Column(modifier = modifier
+        .fillMaxSize()
+        .padding(16.dp)){
+        Spacer(modifier = Modifier.height(16.dp))
+        TopBar()
+        Spacer(modifier = Modifier.height(16.dp))
+        if (encantamientoSelecciodo != null) {
+            EncantamientoConcreto(encantamiento = encantamientoSelecciodo!!)
+        } else {
             LazyColumn(verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)) {
-                for (i in 0..(listaEncantamientos.size - 1) step 2) {
+                for (i in 0..(encantamientosFinal.size - 1) step 2) {
                     item {
                         Row(modifier = Modifier
                             .fillMaxWidth()
@@ -115,7 +117,6 @@ fun EncantamientoEscena(modifier: Modifier = Modifier) {
             }
         }
     }
-
 }
 
 @Composable
@@ -123,8 +124,6 @@ fun EncantamientoConcreto(encantamiento: Encantamientos, modifier: Modifier = Mo
         Column(modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)) {
-            Spacer(modifier = Modifier.height(16.dp))
-            Text("Encantamiento seleccionado:", fontSize = 24.sp)
             Spacer(modifier = Modifier.height(16.dp))
             Row(modifier = Modifier.padding(16.dp)) {
                 Image(
@@ -279,8 +278,6 @@ fun EncantamientoConcreto(encantamiento: Encantamientos, modifier: Modifier = Mo
                             }
                         }
                     }
-                Text(text = "Random texto para probar el diseño", fontSize = 30.sp, textAlign = TextAlign.Center)
             }
         }
-
 }
