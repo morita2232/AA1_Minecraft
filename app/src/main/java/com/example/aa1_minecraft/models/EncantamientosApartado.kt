@@ -20,7 +20,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,75 +45,108 @@ fun EncantamientoEscena(modifier: Modifier = Modifier) {
     val listaEncantamientos = DataLoaders().loadEncantamientosInfo()
     var encantamientoSelecciodo by remember { mutableStateOf<Encantamientos?>(null) }
     val encantamientosFinal = listaEncantamientos.filter { it.versionImplementada <= Version.version.toFloat() }
-    Column(modifier = modifier
-        .fillMaxSize()
-        .padding(16.dp)){
-        Spacer(modifier = Modifier.height(16.dp))
-        TopBar()
-        Spacer(modifier = Modifier.height(16.dp))
-        if (encantamientoSelecciodo != null) {
-            EncantamientoConcreto(encantamiento = encantamientoSelecciodo!!)
-        } else {
-            LazyColumn(verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)) {
-                for (i in 0..(encantamientosFinal.size - 1) step 2) {
-                    item {
-                        Row(modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 8.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-                            Button(onClick = { encantamientoSelecciodo = listaEncantamientos[i] }, modifier = Modifier
-                                .border(BorderStroke(4.dp, Color.Red))
-                                .size(width = 150.dp, height = 150.dp),
-                                contentPadding = PaddingValues(top = 3.dp, bottom = 3.dp),
-                                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
-                                shape = RoundedCornerShape(0.dp)) {
-                                Box(modifier = Modifier.fillMaxSize()) {
-                                    Image(painter = painterResource(id = listaEncantamientos[i].imageResourceID), contentDescription = null, modifier = Modifier.fillMaxSize())
-                                    Box(modifier = Modifier
-                                        .fillMaxWidth()
-                                        .align(Alignment.BottomCenter)
-                                        .padding(bottom = 5.dp)){
-                                        Text(
-                                            text = listaEncantamientos[i].encantamiento.nombre,
+
+
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background
+    ) { innerPadding ->
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(16.dp)
+        ) {
+            Spacer(modifier = Modifier.height(16.dp))
+            TopBar()
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if (encantamientoSelecciodo != null) {
+                EncantamientoConcreto(encantamiento = encantamientoSelecciodo!!)
+            } else {
+                LazyColumn(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                ) {
+                    for (i in 0..(encantamientosFinal.size - 1) step 2) {
+                        item {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 8.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Button(
+                                    onClick = { encantamientoSelecciodo = listaEncantamientos[i] },
+                                    modifier = Modifier
+                                        .border(BorderStroke(4.dp, MaterialTheme.colorScheme.outline))
+                                        .size(width = 150.dp, height = 150.dp),
+                                    contentPadding = PaddingValues(top = 3.dp, bottom = 3.dp),
+                                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+                                    shape = RoundedCornerShape(0.dp)
+                                ) {
+                                    Box(modifier = Modifier.fillMaxSize()) {
+                                        Image(
+                                            painter = painterResource(id = listaEncantamientos[i].imageResourceID),
+                                            contentDescription = null,
+                                            modifier = Modifier.fillMaxSize()
+                                        )
+                                        Box(
                                             modifier = Modifier
                                                 .fillMaxWidth()
-                                                .background(Color.Black.copy(0.75f)),
-                                            textAlign = TextAlign.Center,
-                                            color = Color.Green
-                                        )
-                                    }
-                                }
-                            }
-                            if(i+ 1 < listaEncantamientos.size){
-                                Button(onClick = { encantamientoSelecciodo = listaEncantamientos[i + 1] }, modifier = Modifier
-                                    .border(BorderStroke(4.dp, Color.Red))
-                                    .size(width = 150.dp, height = 150.dp),
-                                    contentPadding = PaddingValues(top = 3.dp, bottom = 3.dp),
-                                    colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
-                                    shape = RoundedCornerShape(0.dp)) {
-                                    Box(modifier = Modifier.fillMaxSize()) {
-                                        Image(painter = painterResource(id = listaEncantamientos[i + 1].imageResourceID), contentDescription = null, modifier = Modifier.fillMaxSize())
-                                        Box(modifier = Modifier
-                                            .fillMaxWidth()
-                                            .align(Alignment.BottomCenter)
-                                            .padding(bottom = 5.dp)){
+                                                .align(Alignment.BottomCenter)
+                                                .padding(bottom = 5.dp)
+                                        ) {
                                             Text(
-                                                text = listaEncantamientos[i + 1].encantamiento.nombre,
+                                                text = listaEncantamientos[i].encantamiento.nombre,
                                                 modifier = Modifier
                                                     .fillMaxWidth()
-                                                    .background(Color.Black.copy(0.75f)),
+                                                    .background(MaterialTheme.colorScheme.onSecondaryContainer),
                                                 textAlign = TextAlign.Center,
-                                                color = Color.Green
+                                                color = MaterialTheme.colorScheme.onPrimaryContainer
                                             )
                                         }
                                     }
                                 }
+                                if (i + 1 < listaEncantamientos.size) {
+                                    Button(
+                                        onClick = { encantamientoSelecciodo = listaEncantamientos[i + 1] },
+                                        modifier = Modifier
+                                            .border(BorderStroke(4.dp, MaterialTheme.colorScheme.outline))
+                                            .size(width = 150.dp, height = 150.dp),
+                                        contentPadding = PaddingValues(top = 3.dp, bottom = 3.dp),
+                                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+                                        shape = RoundedCornerShape(0.dp)
+                                    ) {
+                                        Box(modifier = Modifier.fillMaxSize()) {
+                                            Image(
+                                                painter = painterResource(id = listaEncantamientos[i + 1].imageResourceID),
+                                                contentDescription = null,
+                                                modifier = Modifier.fillMaxSize()
+                                            )
+                                            Box(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .align(Alignment.BottomCenter)
+                                                    .padding(bottom = 5.dp)
+                                            ) {
+                                                Text(
+                                                    text = listaEncantamientos[i + 1].encantamiento.nombre,
+                                                    modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .background(MaterialTheme.colorScheme.onSecondaryContainer),
+                                                    textAlign = TextAlign.Center,
+                                                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
                             }
+                            Spacer(modifier = Modifier.height(16.dp))
                         }
-                        Spacer(modifier = Modifier.height(16.dp))
                     }
                 }
             }
@@ -120,164 +155,157 @@ fun EncantamientoEscena(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun EncantamientoConcreto(encantamiento: Encantamientos, modifier: Modifier = Modifier){
-        Column(modifier = Modifier
+fun EncantamientoConcreto(
+    encantamiento: Encantamientos,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp)) {
-            Spacer(modifier = Modifier.height(16.dp))
-            Row(modifier = Modifier.padding(16.dp)) {
-                Image(
-                    painter = painterResource(id = encantamiento.imageResourceID),
-                    contentDescription = null,
-                    modifier = Modifier.size(150.dp)
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                    Spacer(modifier = Modifier.height(5.dp))
-                    Text(text = encantamiento.encantamiento.nombre, textAlign = TextAlign.Center, fontSize = 28.sp)
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = encantamiento.efecto, textAlign = TextAlign.Center)
-                }
-            }
-            Column(modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center){
-                Row (modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.Gray)
-                    .weight(1f), horizontalArrangement = Arrangement.Center){
-                    Box(modifier = Modifier
-                        .weight(1f)
-                        .border(BorderStroke(2.dp, Color.Red))
-                        .padding(2.dp)
-                        .border(BorderStroke(4.dp, Color.Black.copy(alpha = 0.75f)))
-                        .fillMaxSize(),
-                        contentAlignment = Alignment.Center) {
-                        Text(
-                            text = "Nivel máximo",
-                            fontSize = 20.sp,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                    Box(modifier = Modifier
-                        .weight(1f)
-                        .border(BorderStroke(2.dp, Color.Red))
-                        .padding(2.dp)
-                        .border(BorderStroke(4.dp, Color.Black.copy(alpha = 0.75f)))
-                        .fillMaxSize(),
-                        contentAlignment = Alignment.Center){
-                        Text(
-                            text = encantamiento.nivelMaximo.toString(),
-                            fontSize = 20.sp,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                }
-                Row (modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.Gray)
-                    .weight(1f), horizontalArrangement = Arrangement.Center) {
-                    Box(modifier = Modifier
-                        .weight(1f)
-                        .border(BorderStroke(2.dp, Color.Red))
-                        .padding(2.dp)
-                        .border(BorderStroke(4.dp, Color.Black.copy(alpha = 0.75f)))
-                        .fillMaxSize(),
-                        contentAlignment = Alignment.Center) {
-                        Text(
-                            text = "Peso encantamiento",
-                            fontSize = 20.sp,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                    Box(modifier = Modifier
-                        .weight(1f)
-                        .border(BorderStroke(2.dp, Color.Red))
-                        .padding(2.dp)
-                        .border(BorderStroke(4.dp, Color.Black.copy(alpha = 0.75f)))
-                        .fillMaxSize(),
-                        contentAlignment = Alignment.Center) {
-                        Text(
-                            text = encantamiento.pesoEncantamiento.toString(),
-                            fontSize = 20.sp,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                }
-                Row (modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.Gray)
-                    .weight(1f), horizontalArrangement = Arrangement.Center) {
-                    Box(modifier = Modifier
-                        .weight(1f)
-                        .border(BorderStroke(2.dp, Color.Red))
-                        .padding(2.dp)
-                        .border(BorderStroke(4.dp, Color.Black.copy(alpha = 0.75f)))
-                        .fillMaxSize(),
-                        contentAlignment = Alignment.Center) {
-                        Text(
-                            text = "Se encuentra \nsolo en tesoros",
-                            fontSize = 20.sp,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                    if (encantamiento.halladoEnTesoro) {
-                        Box(modifier = Modifier
-                            .weight(1f)
-                            .border(BorderStroke(2.dp, Color.Red))
-                            .padding(2.dp)
-                            .border(BorderStroke(4.dp, Color.Black.copy(alpha = 0.75f)))
-                            .fillMaxSize(),
-                            contentAlignment = Alignment.Center) {
-                            Text(text = "Sí", fontSize = 20.sp, textAlign = TextAlign.Center)
-                        }
-                    } else {
-                        Box(modifier = Modifier.weight(1f)
-                            .border(BorderStroke(2.dp, Color.Red))
-                            .padding(2.dp)
-                            .border(BorderStroke(4.dp, Color.Black.copy(alpha = 0.75f)))
-                            .fillMaxSize(),
-                            contentAlignment = Alignment.Center){
-                            Text(text = "No", fontSize = 20.sp, textAlign = TextAlign.Center)
-                        }
-                    }
-                }
-                Row (modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.Gray)
-                    .weight(1f), horizontalArrangement = Arrangement.Center) {
-                    Box(modifier = Modifier
-                        .weight(1f)
-                        .border(BorderStroke(2.dp, Color.Red))
-                        .padding(2.dp)
-                        .border(BorderStroke(4.dp, Color.Black.copy(alpha = 0.75f)))
-                        .fillMaxSize(),
-                        contentAlignment = Alignment.Center) {
-                        Text(
-                            text = "Disponible en los siguientes items",
-                            fontSize = 20.sp,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                    Box(modifier = Modifier
-                            .weight(1f)
-                            .border(BorderStroke(2.dp, Color.Red))
-                            .padding(2.dp)
-                            .border(BorderStroke(4.dp, Color.Black.copy(alpha = 0.75f)))
-                            .fillMaxSize(),
-                            contentAlignment = Alignment.Center) {
-                            LazyColumn {
-                                item{
-                                    for (item in encantamiento.encantamiento.itemsCompatibles) {
-                                        Text(text = item.nombre, fontSize = 20.sp, textAlign = TextAlign.Center)
-                                        Spacer(modifier = Modifier.height(2.dp))
-                                    }
-                                }
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier = Modifier.height(8.dp))
 
+        // Imagen + título + efecto
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = encantamiento.imageResourceID),
+                contentDescription = encantamiento.encantamiento.nombre,
+                modifier = Modifier.size(150.dp)
+            )
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.Start,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = encantamiento.encantamiento.nombre,
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = encantamiento.efecto,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Grid informativo: cuatro filas, dos columnas
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            // Fila: Nivel máximo / valor
+            InfoRow(label = "Nivel máximo", value = encantamiento.nivelMaximo.toString())
+
+            // Fila: Peso encantamiento / valor
+            InfoRow(label = "Peso encantamiento", value = encantamiento.pesoEncantamiento.toString())
+
+            // Fila: ¿Solo en tesoros? / Sí/No
+            InfoRow(label = "Se encuentra solo en tesoros", value = if (encantamiento.halladoEnTesoro) "Sí" else "No")
+
+            // Fila: Items compatibles / lista
+            Column(modifier = Modifier.fillMaxWidth()) {
+                // Label
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .border(BorderStroke(1.dp, MaterialTheme.colorScheme.outline), shape = RoundedCornerShape(6.dp))
+                        .background(MaterialTheme.colorScheme.surfaceVariant, shape = RoundedCornerShape(6.dp))
+                        .padding(8.dp)
+                ) {
+                    Text(
+                        text = "Disponible en los siguientes items",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .border(BorderStroke(1.dp, MaterialTheme.colorScheme.outline), shape = RoundedCornerShape(6.dp))
+                        .background(MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(6.dp))
+                        .padding(8.dp)
+                ) {
+                    // Lista vertical compacta
+                    LazyColumn {
+                        item {
+                            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                                encantamiento.encantamiento.itemsCompatibles.forEach { item ->
+                                    Text(
+                                        text = item.nombre,
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        fontSize = 18.sp,
+                                        color = MaterialTheme.colorScheme.onSurface,
+                                        textAlign = TextAlign.Start,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                }
                             }
                         }
                     }
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun InfoRow(label: String, value: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(BorderStroke(1.dp, MaterialTheme.colorScheme.outline), shape = RoundedCornerShape(6.dp))
+            .background(MaterialTheme.colorScheme.surfaceVariant, shape = RoundedCornerShape(6.dp))
+            .padding(6.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // Label caja (izquierda)
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .padding(6.dp),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+
+        // Value caja (derecha)
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .padding(6.dp),
+            contentAlignment = Alignment.CenterEnd
+        ) {
+            Text(
+                text = value,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
+    }
 }

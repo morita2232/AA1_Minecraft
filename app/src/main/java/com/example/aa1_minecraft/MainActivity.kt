@@ -12,17 +12,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.aa1_minecraft.models.EncantamientoEscena
-import com.example.aa1_minecraft.ui.theme.AA1_MinecraftTheme
+import com.example.aa1_minecraft.models.LoginScreen
+import com.example.compose.AA1_MinecraftTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            AA1_MinecraftTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    EncantamientoEscena(modifier = Modifier.padding(innerPadding))
-                }
+            AA1_MinecraftTheme(darkTheme = true, dynamicColor = false) {
+                //Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                LoginScreen()
+                //EncantamientoEscena(modifier = Modifier.padding(innerPadding))
+                //}
             }
         }
     }
