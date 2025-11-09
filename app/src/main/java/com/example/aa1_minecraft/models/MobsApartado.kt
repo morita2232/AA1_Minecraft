@@ -33,11 +33,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.aa1_minecraft.clases.DataLoaders
 import com.example.aa1_minecraft.clases.Mobs
 
 @Composable
-fun MobsEscena(modifier: Modifier = Modifier) {
+fun MobsEscena(modifier: Modifier = Modifier, navController: NavController) {
     val listaMobs = DataLoaders().loadMobsInfo()
     var mobSelecciodo by remember { mutableStateOf<Mobs?>(null) }
     val encantamientosFinal = listaMobs.filter { it.versionImplementada <= Version.version.toFloat() }
@@ -48,7 +49,11 @@ fun MobsEscena(modifier: Modifier = Modifier) {
         TopBar()
         Spacer(modifier = Modifier.height(16.dp))
         if (mobSelecciodo != null) {
-            MobConcreto(mob = mobSelecciodo!!)
+            LazyColumn {
+                item{
+                    MobConcreto(mob = mobSelecciodo!!)
+                }
+            }
         } else {
             LazyColumn(verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,

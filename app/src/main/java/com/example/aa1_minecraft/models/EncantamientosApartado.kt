@@ -34,12 +34,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.aa1_minecraft.R
 import com.example.aa1_minecraft.clases.DataLoaders
 import com.example.aa1_minecraft.clases.Encantamientos
 
 @Composable
-fun EncantamientoEscena(modifier: Modifier = Modifier) {
+fun EncantamientoEscena(modifier: Modifier = Modifier, navController: NavController) {
     val listaEncantamientos = DataLoaders().loadEncantamientosInfo()
     var encantamientoSelecciodo by remember { mutableStateOf<Encantamientos?>(null) }
     val encantamientosFinal = listaEncantamientos.filter { it.versionImplementada <= Version.version.toFloat() }
