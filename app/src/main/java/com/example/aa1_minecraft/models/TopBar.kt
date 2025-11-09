@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun TopBar(){
     var expanded by remember {mutableStateOf(false)}
-    val items = listOf("1.7", "1.8")
+    val versiones = listOf(1.7f, 1.8f)
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         Button(onClick = { expanded =!expanded }, modifier = Modifier
             .border(BorderStroke(4.dp, Color.Red))
@@ -39,12 +39,12 @@ fun TopBar(){
             shape = RoundedCornerShape(0.dp)) {
             Row {
                 Text(text = "Versión: ")
-                Text(text = Version.version)
+                Text(text = Version.version.toString())
             }
         }
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            items.forEach { item ->
-                DropdownMenuItem(text = { Text(text = item) }, onClick = { Version.version = item; expanded = false })
+            versiones.forEach { item ->
+                DropdownMenuItem(text = { Text(text = item.toString()) }, onClick = { Version.version = item; expanded = false })
             }
         }
         Spacer(modifier = Modifier.width(16.dp))

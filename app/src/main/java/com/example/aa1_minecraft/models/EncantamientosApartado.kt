@@ -1,5 +1,6 @@
 package com.example.aa1_minecraft.models
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,9 +21,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,15 +36,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.aa1_minecraft.R
 import com.example.aa1_minecraft.clases.DataLoaders
 import com.example.aa1_minecraft.clases.Encantamientos
 
 @Composable
 fun EncantamientoEscena(modifier: Modifier = Modifier, navController: NavController) {
-    val listaEncantamientos = DataLoaders().loadEncantamientosInfo()
     var encantamientoSelecciodo by remember { mutableStateOf<Encantamientos?>(null) }
-    val encantamientosFinal = listaEncantamientos.filter { it.versionImplementada <= Version.version.toFloat() }
+    val listaEncantamientos = remember { DataLoaders().loadEncantamientosInfo() }
+
+    val versionActual by remember { mutableStateOf(Version.version) }
+    val encantamientosFinal = listaEncantamientos.filter { it.versionImplementada <= versionActual }
+
     Column(modifier = modifier
         .fillMaxSize()
         .padding(16.dp)){
@@ -63,20 +66,20 @@ fun EncantamientoEscena(modifier: Modifier = Modifier, navController: NavControl
                         Row(modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 8.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-                            Button(onClick = { encantamientoSelecciodo = listaEncantamientos[i] }, modifier = Modifier
+                            Button(onClick = { encantamientoSelecciodo = encantamientosFinal[i] }, modifier = Modifier
                                 .border(BorderStroke(4.dp, Color.Red))
                                 .size(width = 150.dp, height = 150.dp),
                                 contentPadding = PaddingValues(top = 3.dp, bottom = 3.dp),
                                 colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
                                 shape = RoundedCornerShape(0.dp)) {
                                 Box(modifier = Modifier.fillMaxSize()) {
-                                    Image(painter = painterResource(id = listaEncantamientos[i].imageResourceID), contentDescription = null, modifier = Modifier.fillMaxSize())
+                                    Image(painter = painterResource(id = encantamientosFinal[i].imageResourceID), contentDescription = null, modifier = Modifier.fillMaxSize())
                                     Box(modifier = Modifier
                                         .fillMaxWidth()
                                         .align(Alignment.BottomCenter)
                                         .padding(bottom = 5.dp)){
                                         Text(
-                                            text = listaEncantamientos[i].encantamiento.nombre,
+                                            text = encantamientosFinal[i].encantamiento.nombre,
                                             modifier = Modifier
                                                 .fillMaxWidth()
                                                 .background(Color.Black.copy(0.75f)),
@@ -86,21 +89,21 @@ fun EncantamientoEscena(modifier: Modifier = Modifier, navController: NavControl
                                     }
                                 }
                             }
-                            if(i+ 1 < listaEncantamientos.size){
-                                Button(onClick = { encantamientoSelecciodo = listaEncantamientos[i + 1] }, modifier = Modifier
+                            if(i+ 1 < encantamientosFinal.size){
+                                Button(onClick = { encantamientoSelecciodo = encantamientosFinal[i + 1] }, modifier = Modifier
                                     .border(BorderStroke(4.dp, Color.Red))
                                     .size(width = 150.dp, height = 150.dp),
                                     contentPadding = PaddingValues(top = 3.dp, bottom = 3.dp),
                                     colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
                                     shape = RoundedCornerShape(0.dp)) {
                                     Box(modifier = Modifier.fillMaxSize()) {
-                                        Image(painter = painterResource(id = listaEncantamientos[i + 1].imageResourceID), contentDescription = null, modifier = Modifier.fillMaxSize())
+                                        Image(painter = painterResource(id = encantamientosFinal[i + 1].imageResourceID), contentDescription = null, modifier = Modifier.fillMaxSize())
                                         Box(modifier = Modifier
                                             .fillMaxWidth()
                                             .align(Alignment.BottomCenter)
                                             .padding(bottom = 5.dp)){
                                             Text(
-                                                text = listaEncantamientos[i + 1].encantamiento.nombre,
+                                                text = encantamientosFinal[i + 1].encantamiento.nombre,
                                                 modifier = Modifier
                                                     .fillMaxWidth()
                                                     .background(Color.Black.copy(0.75f)),

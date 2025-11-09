@@ -49,11 +49,7 @@ fun MobsEscena(modifier: Modifier = Modifier, navController: NavController) {
         TopBar()
         Spacer(modifier = Modifier.height(16.dp))
         if (mobSelecciodo != null) {
-            LazyColumn {
-                item{
-                    MobConcreto(mob = mobSelecciodo!!)
-                }
-            }
+            MobConcreto(mob = mobSelecciodo!!)
         } else {
             LazyColumn(verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
